@@ -1,0 +1,33 @@
+version: '2'
+services:
+    config:
+        build:
+            context: ./config-service
+            dockerfile: Dockerfile
+        ports:
+            - "8888:8888"
+        networks:
+            - spring-cloud-network
+    discovery:
+        build:
+            context: ./discovery-service
+            dockerfile: Dockerfile
+        ports:
+            - "8761:8761"
+        networks:
+            - spring-cloud-network
+        depends_on:
+            - config
+    product:
+        build:
+            context: ./product-service
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080" 
+        depends_on:
+            - config
+        networks:
+            - spring-cloud-network
+networks:
+    spring-cloud-network:
+        driver: bridge
